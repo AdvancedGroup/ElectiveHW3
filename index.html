@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Prisoner&#39;s Dilemma by AdvancedGroup</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Prisoner&#39;s Dilemma</h1>
+      <h2 class="project-tagline"></h2>
+      <a href="https://github.com/AdvancedGroup/ElectiveHW3" class="btn">View on GitHub</a>
+      <a href="https://github.com/AdvancedGroup/ElectiveHW3/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/AdvancedGroup/ElectiveHW3/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h3>
+<a id="due-date" class="anchor" href="#due-date" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Due Date</h3>
+
+<p>This assignment’s first due is <strong>Wed 11:59:59pm, 27th July</strong>.<br>
+The rank will be available after that.<br>
+Then you can keep updating until <strong>1st August</strong>.  </p>
+
+<h3>
+<a id="background" class="anchor" href="#background" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Background</h3>
+
+<p>The Prisoner's Dilemma is a classic problem in game theory which is often used to explore behaviors in a situation of strategic interdependence.<br>
+The usual presentation of the problem is that two suspects are being interrogated separately by a detective.  The detective
+has insufficient evidence to make an arrest, so is depending on a plea bargain to make a convincing case. The detective offers each suspect the following deal: <strong>defect</strong> and admit to the crime in exchange for early parole, or <strong>cooperate</strong> (with the other prisoner) and refuse to admit the crime. Neither suspect is told of the other's choice.</p>
+
+<p>As one might expect, if both cooperate (C,C) (=don't admit) then both are released (for payoff of 3 each). If one defects while the other cooperates, (D,C) or (C,D), then the person who defects (=admits) is released and rewarded (payoff 5) while the other serves a long sentence (payoff 0). If both defect (D,D) (=admit) then they both go to prison
+but with early parole (payoff 1). We use payoffs adjusted by +5 here.    </p>
+
+<p>In this usual presentation of the Prisoner's Dilemma only one equilibrium exists: both suspects defect and both face prison time with early parole. As we have seen, this is a dominant strategy equilibrium. However, if both suspects had cooperated, then both would have been gone free. This is the dilemma!  </p>
+
+<p>To make more fun, the information your player receives about its opponent's previous action is noisy, i.e. with probability 0.05 your player receives incorrect information about the previous action of the other player.  </p>
+
+<h3>
+<a id="task" class="anchor" href="#task" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Task</h3>
+
+<p>Your task is to create an agent for the iterated noisy prisoner's dilemma described above. In each round, there will be a 5% probability of misdetecting your opponent's move. The scores for each round are as follows.  </p>
+
+<p>==C====D==<br>
+C (3, 3) (0, 5)<br>
+D (5, 0) (1, 1)  </p>
+
+<p>The scores are computed using the actual joint action of the two agents, even if the 5% noise leads one or both agents to get the wrong information about the other's action.    </p>
+
+<h3>
+<a id="rule" class="anchor" href="#rule" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Rule</h3>
+
+<p>You will be modeling a game strategy using an state machine, following the description in class.
+In your file, you are going to use each line to describe one state in the state machine.</p>
+
+<p>Each line has format:<br>
+<em><strong>state_id: prob_of_cooperate state_on_cc state_on_cd state_on_dc state_on_dd</strong></em>    </p>
+
+<p>Where:</p>
+
+<ul>
+<li>
+<strong>state_id</strong> is the id of the state. These must be 0,1,2,3,4 in that order. And you can have at most 10 states which means id has to be from 0 to 9.<br>
+</li>
+<li>
+<strong>prob_of_cooperate</strong> is the probability of cooperating when in this state (and thus one minus this value is the probability of defecting).<br>
+</li>
+<li>
+<strong>state_on_cc</strong> is the state to move to on information that both agents cooperated in this round.<br>
+</li>
+<li>
+<strong>state_on_cd</strong> is the state to move to on information that your agent cooperated and the other agent defected in this round.<br>
+</li>
+<li>
+<strong>state_on_dc</strong> is the state to move to on information that your agent defected and the other agent cooperated in this round.<br>
+</li>
+<li>
+<strong>state_on_dd</strong> is the state to move to on information that both agents defected in this round.<br>
+</li>
+</ul>
+
+<p>Remember that your automata gets noisy information about the play of the other agent. With probability 0.05, the transition will be based on the wrong information about the other agent's action.<br>
+State 0 will always be your start state.  </p>
+
+<p><strong>Here are some examples:</strong><br>
+0: 0.4 0 0 0 0<br>
+This is a simple one that has one state, and thus always stays in it. It keeps using C with 0.4 probability.  </p>
+
+<p>A slightly more complicated automaton might have two states with different probabilities of cooperation, and switch between them based on what the opponent does. It might look something like this:<br>
+0: 0.6 1 0 0 1<br>
+1: 0.8 1 0 0 1  </p>
+
+<p>There are two states (0 is always the initial state). When in state 0, the automaton will cooperate with probability 0.6 and in two situations(if both players cooperated or both players defected it will move to state 1. When in state 1, it will cooperate with probability 0.8 and will return to state 0 if the players acted differently (one defected and one cooperated).  </p>
+
+<h3>
+<a id="submission" class="anchor" href="#submission" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Submission:</h3>
+
+<p>Please email us(<a href="mailto:mikiiiiiiiii9@gmail.com">mikiiiiiiiii9@gmail.com</a>) your strategy with the format described in a txt file.<br>
+The subject of e-mail should be <strong>Prisoner's Dilemma- YOUR NAME</strong>.    </p>
+
+<h3>
+<a id="competition" class="anchor" href="#competition" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Competition</h3>
+
+<p>We will run each submitted state machine against each of the others 10 times, with each game lasting 100 rounds. We will rank agents by their cumulative score.  </p>
+
+<p>``</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/AdvancedGroup/ElectiveHW3">Prisoner&#39;s Dilemma</a> is maintained by <a href="https://github.com/AdvancedGroup">AdvancedGroup</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
